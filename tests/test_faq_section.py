@@ -1,3 +1,8 @@
+import sys
+import os
+
+sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
+
 import pytest
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
@@ -15,7 +20,7 @@ class TestFaqSection:
 
     @classmethod
     def setup_class(cls):
-        cls.driver = webdriver.Chrome()
+        cls.driver = webdriver.Firefox()
 
     @pytest.mark.parametrize(
         "locator, expected_text",

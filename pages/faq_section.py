@@ -2,7 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
-from locators.faq_section_locators import *
+from locators.faq_section_locators import FaqSectionLocators
 
 driver = webdriver.Firefox()
 
