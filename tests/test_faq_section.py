@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
+import allure
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
@@ -16,6 +17,7 @@ import time
 
 class TestFaqSection:
 
+    url = "https://qa-scooter.education-services.ru"
     driver = None
     locator = FaqSectionLocators()
 
@@ -36,10 +38,13 @@ class TestFaqSection:
             (FaqSectionLocators.faq_button_8, FaqSectionLocators.faq_button_8_text),
         ],
     )
+    @allure.description(
+        "На странице ищем раздел FAQ и проверяем что при нажатии на кнопку вопроса отображается ответ"
+    )
     def test_faq_section(self, locator, expected_text):
-        self.driver.get("https://qa-scooter.education-services.ru")
-
         faq_section = FaqSection(self.driver)
+
+        faq_section.open_page(self.url)
         faq_section.accept_coockie()
 
         # листаем страницу до раздела FAQ

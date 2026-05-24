@@ -78,4 +78,3 @@ class OrderPageLocators:
         By.XPATH,
         ".//button[contains(text(), 'Посмотреть статус')]",
     ]
-    check_name = [By.CLASS_NAME, "Track_Value__15eEX"]  # проверка содержит "Евгений"

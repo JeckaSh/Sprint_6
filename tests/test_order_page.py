@@ -4,6 +4,7 @@ import os
 sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
+import allure
 from selenium import webdriver
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
@@ -15,6 +16,7 @@ from locators.order_page_locators import OrderPageLocators
 
 class TestOrderPage:
 
+    url = "https://qa-scooter.education-services.ru"
     driver = None
     order_page_locator = OrderPageLocators()
 
@@ -30,11 +32,13 @@ class TestOrderPage:
             (BaseLocators.lower_make_order_button),
         ],
     )
+    @allure.title("Аренда самоката позитивный сценарий")
+    @allure.description(
+        "Проверка всего флоу позитивного сценария заказа самоката с двумя входными точками: кнопками 'заказать' вверху и внизу страницы'. Проверка что при нажатии на логотип самоката - открывается главная страница {url}. Проверка что при нажатии на логотип яндекса открывается главная страница поисковика яндекс"
+    )
     def test_make_order_positive(self, entry_point):
-        self.driver.get("https://qa-scooter.education-services.ru")
-        homepage = self.driver.current_window_handle
-
         order_page = OrderPage(self.driver)
+        order_page.open_page(self.url)
         order_page.accept_coockie()
         order_page.click_order_page_entry_point(entry_point)
 
