@@ -38,6 +38,7 @@ class TestFaqSection:
             (FaqSectionLocators.faq_button_8, FaqSectionLocators.faq_button_8_text),
         ],
     )
+    @allure.title("Проверка отображения ответа в FAQ при клике на вопрос")
     @allure.description(
         "На странице ищем раздел FAQ и проверяем что при нажатии на кнопку вопроса отображается ответ"
     )
@@ -47,12 +48,9 @@ class TestFaqSection:
         faq_section.open_page(self.url)
         faq_section.accept_coockie()
 
-        # листаем страницу до раздела FAQ
         faq_section.scroll_page_to_faq_title()
-        # time.sleep(0.5)
-        # кликаем на кнопку
         faq_section.click_faq_button(locator)
-        # проверяем что сообщение отображается
+
         assert faq_section.check_faq_text_is_visible(expected_text)
 
     @classmethod
