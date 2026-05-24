@@ -3,8 +3,8 @@ from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions
 from locators.faq_section_locators import FaqSectionLocators
-
-driver = webdriver.Firefox()
+from locators.base_locators import BaseLocators
+import time
 
 
 class FaqSection:
@@ -13,22 +13,36 @@ class FaqSection:
     def __init__(self, driver):
         self.driver = driver
 
+    def accept_coockie(self):
+        try:
+            element = WebDriverWait(self.driver, 5).until(
+                expected_conditions.visibility_of_element_located(
+                    BaseLocators.accept_coockie_button
+                )
+            )
+            element.click()
+        except:
+            print("Coockie уже приняты")
+
     def scroll_page_to_faq_title(self):
-        element = driver.find_element(*self.locator.faq_title)
-        driver.execute_script("arguments[0].scrollIntoView();", element)
+        element = self.driver.find_element(*self.locator.faq_title)
+        self.driver.execute_script(
+            "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element
+        )
+        time.sleep(0.3)
 
     def click_faq_button(self, button_locator):
-        button_strategy, button_locator = button_locator
-        button_locator = WebDriverWait(self.driver, 5).until(
-            expected_conditions.element_to_be_clickable(
-                (getattr(By, button_strategy.upper()), button_locator)
+        button_strategy, locator = button_locator
+        button_locator = WebDriverWait(self.driver, 10).until(
+            expected_conditions.visibility_of_element_located(
+                (getattr(By, button_strategy.upper()), locator)
             )
         )
         button_locator.click()
 
     def check_faq_text_is_visible(self, expected_text):
         expected_strategy, expected_locator = expected_text
-        expected_text = WebDriverWait(self.driver, 5).until(
+        expected_text = WebDriverWait(self.driver, 10).until(
             expected_conditions.visibility_of_element_located(
                 (getattr(By, expected_strategy.upper()), expected_locator)
             )

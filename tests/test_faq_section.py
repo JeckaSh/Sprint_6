@@ -11,6 +11,7 @@ from selenium.webdriver.common.by import By
 from locators.faq_section_locators import FaqSectionLocators
 from locators.base_locators import BaseLocators
 from pages.faq_section import FaqSection
+import time
 
 
 class TestFaqSection:
@@ -38,15 +39,12 @@ class TestFaqSection:
     def test_faq_section(self, locator, expected_text):
         self.driver.get("https://qa-scooter.education-services.ru")
 
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                *BaseLocators.homepage_title_locator
-            )
-        )
+        faq_section = FaqSection(self.driver)
+        faq_section.accept_coockie()
 
-        faq_section = FaqSection()
         # листаем страницу до раздела FAQ
         faq_section.scroll_page_to_faq_title()
+        # time.sleep(0.5)
         # кликаем на кнопку
         faq_section.click_faq_button(locator)
         # проверяем что сообщение отображается
