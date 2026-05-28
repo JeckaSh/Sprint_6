@@ -12,7 +12,7 @@ class OrderPageLocators:
         By.XPATH,
         ".//input[@placeholder='* Фамилия']",
     ]
-    input_ardess_field = [
+    input_adress_field = [
         By.XPATH,
         ".//input[@placeholder='* Адрес: куда привезти заказ']",
     ]
@@ -40,7 +40,7 @@ class OrderPageLocators:
         By.XPATH,
         ".//input[@placeholder='* Когда привезти самокат']",
     ]
-    date_picker = [By.XPATH, ".//div[@class='react-datepicker__month-container']"]
+    date_picker = [By.XPATH, ".//div[@class='react-datepicker__month']"]
     input_order_time_field = [
         By.XPATH,
         ".//div[@class='Dropdown-placeholder']",

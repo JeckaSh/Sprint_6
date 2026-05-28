@@ -2,163 +2,124 @@ from selenium import webdriver
 import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions
-from locators.base_locators import BaseLocators
+from selenium.webdriver.support import expected_conditions as ec
+from selenium.common.exceptions import TimeoutException
 from locators.order_page_locators import OrderPageLocators
+from locators.base_locators import BaseLocators
+from pages.base_page import BasePage
+from constants.urls import Urls
 from constants.order_page_constants import OrderPageConstants
 
 
-import time
+class OrderPage(BasePage):
 
+    @allure.step("Открывает главную страницу Scooter")
+    def open_homepage(self):
+        self.go_homepage()
 
-class OrderPage:
-    base_locator = BaseLocators()
-    order_page_locator = OrderPageLocators()
+    @allure.step("Принимает Cookie")
+    def accept_cookie(self):
+        self.cookie()
 
-    def __init__(self, driver):
-        self.driver = driver
-
-    @allure.step("Открываем браузер Firefox")
-    def open_page(self, url):
-        self.driver.get(url)
-
-    @allure.step("Принимаем куки")
-    def accept_coockie(self):
-        try:
-            element = WebDriverWait(self.driver, 5).until(
-                expected_conditions.visibility_of_element_located(
-                    BaseLocators.accept_coockie_button
-                )
-            )
-            element.click()
-        except:
-            print("Coockie уже приняты")
-
-    @allure.step("Нажимаем 'заказать' самокат")
-    def click_order_page_entry_point(self, entry_point):
-        element = self.driver.find_element(*entry_point)
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', inline: 'center'});", element
-        )
-        time.sleep(0.5)
-        element.click()
+    @allure.step("Нажимает 'заказать' самокат на главной странице")
+    def click_entry_point_order_page(self, locator):
+        self.click_element(locator)
 
     @allure.step("Вводим имя")
     def input_first_name(self):
-        self.driver.find_element(*OrderPageLocators.input_first_name_field).send_keys(
-            OrderPageConstants.first_name
+        self.enter_text(
+            OrderPageLocators.input_first_name_field, OrderPageConstants.first_name
         )
 
     @allure.step("Вводим фамилию")
     def input_last_name(self):
-        self.driver.find_element(*OrderPageLocators.input_last_name_field).send_keys(
-            OrderPageConstants.last_name
+        self.enter_text(
+            OrderPageLocators.input_last_name_field, OrderPageConstants.last_name
         )
 
     @allure.step("Вводим адрес")
     def input_adress(self):
-        self.driver.find_element(*OrderPageLocators.input_ardess_field).send_keys(
-            OrderPageConstants.adress
-        )
+        self.enter_text(OrderPageLocators.input_adress_field, OrderPageConstants.adress)
 
     @allure.step("Вводим станцию метро")
     def input_subway_station(self):
-        self.driver.find_element(*OrderPageLocators.input_subway_station).send_keys(
-            OrderPageConstants.subway_station
+        self.enter_text(
+            OrderPageLocators.input_subway_station, OrderPageConstants.subway_station
         )
-        self.driver.find_element(*OrderPageLocators.subway_dropdown_element).click()
+        self.wait.until(
+            ec.visibility_of_element_located(OrderPageLocators.subway_dropdown_element)
+        ).click()
 
     @allure.step("Вводим номер телефона")
     def input_phone_number(self):
-        self.driver.find_element(*OrderPageLocators.input_phone_field).send_keys(
-            OrderPageConstants.phone_number
+        self.enter_text(
+            OrderPageLocators.input_phone_field, OrderPageConstants.phone_number
         )
 
     @allure.step("Жмём кнопку 'далее'")
     def click_next_button(self):
-        element = WebDriverWait(self.driver, 10).until(
-            expected_conditions.visibility_of_element_located(
-                OrderPageLocators.next_button
-            )
+        element = self.wait.until(
+            ec.visibility_of_element_located(OrderPageLocators.next_button)
         )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
-            element,
-        )
-        element.click()
+        self.scroll_to_element(element)
+        self.click_element(OrderPageLocators.next_button)
 
     @allure.step("Вводим дату заказа самоката")
     def input_date(self):
-        self.driver.find_element(*OrderPageLocators.input_date_field).send_keys(
-            OrderPageConstants.date
-        )
+        self.click_element(OrderPageLocators.input_date_field)
+        locator = self.get_current_day()
+        self.wait.until(ec.visibility_of_element_located(locator)).click()
 
     @allure.step("Указываем, на сколько хотим арендовать самокат")
     def input_order_time(self):
-        self.driver.find_element(
-            *OrderPageLocators.input_order_time_dropdown_arrow
+        self.wait.until(
+            ec.visibility_of_element_located(
+                OrderPageLocators.input_order_time_dropdown_arrow
+            )
         ).click()
-        self.driver.find_element(*OrderPageLocators.order_time_dropdown_item).click()
+        self.click_element(OrderPageLocators.order_time_dropdown_item)
 
     @allure.step("Выбираем цвет самоката")
     def select_color(self):
-        self.driver.find_element(*OrderPageLocators.select_color_field).click()
+        self.click_element(OrderPageLocators.select_color_field)
 
     @allure.step("Вводим комментарий для курьера")
     def input_comment(self):
-        self.driver.find_element(*OrderPageLocators.input_comment_field).send_keys(
-            OrderPageConstants.comment
+        self.enter_text(
+            OrderPageLocators.input_comment_field, OrderPageConstants.comment
         )
 
     @allure.step("Нажимаем кнопку 'заказать'")
     def make_order(self):
-        element = WebDriverWait(self.driver, 10).until(
-            expected_conditions.visibility_of_element_located(
-                OrderPageLocators.make_order_button
-            )
-        )
-        self.driver.execute_script(
-            "arguments[0].scrollIntoView({block: 'center', inline: 'center'});",
-            element,
-        )
-        element.click()
+        self.click_element(OrderPageLocators.make_order_button)
 
     @allure.step("Нажимаем 'да' в окне подтверждения создания заказа")
-    def make_order_confirm(self):
-        self.driver.find_element(
-            *OrderPageLocators.order_page_modal_window_yes_button
-        ).click()
-
-        # дожидаемся загрузки модального окна с подтверждением создания заказа
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                self.order_page_locator.order_page_modal_window
-            )
-        )
+    def make_order_confirm_button(self):
+        self.click_element(OrderPageLocators.order_page_modal_window_yes_button)
 
     @allure.step("Нажимаем 'проверить статус'")
     def check_order_status_click_button(self):
-        self.driver.find_element(*OrderPageLocators.check_status_button).click()
+        self.wait.until(
+            ec.visibility_of_element_located(OrderPageLocators.order_page_modal_window)
+        )
+        self.click_element(OrderPageLocators.check_status_button)
 
     @allure.step("Проверяем что заказ успешно создан")
-    def check_order_make_success(self):
-        result = WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                (OrderPageLocators.modal_window_succes_make_order)
+    def check_order_make_status(self):
+        result = self.wait.until(
+            ec.visibility_of_element_located(
+                OrderPageLocators.modal_window_succes_make_order
             )
         )
-        time.sleep(0.3)
         return result.text
 
     @allure.step(
         "Проверяем что при нажатии на логотип самоката открывается главная страница"
     )
     def check_scooter_button(self):
-        self.driver.find_element(*BaseLocators.base_scooter_logo).click()
-        result = WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                (BaseLocators.homepage_title_locator)
-            )
+        self.click_element(BaseLocators.base_scooter_logo)
+        result = self.wait.until(
+            ec.visibility_of_element_located(BaseLocators.homepage_title_locator)
         )
         return result.text
 
@@ -166,48 +127,28 @@ class OrderPage:
         "Проверяем что при нажатии на логотип яндекса открывается главная страница яндекса"
     )
     def check_yandex_button(self):
-        self.driver.find_element(*BaseLocators.base_yandex_logo).click()
-        all_windows = self.driver.window_handles
-        new_window = all_windows[-1]
-        self.driver.switch_to.window(new_window)
-        result = WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                (BaseLocators.yandex_page_search_field)
-            )
+        self.click_element(BaseLocators.base_yandex_logo)
+        windows = self.get_all_windows()
+        self.switch_window(windows)
+        result = self.wait.until(
+            ec.visibility_of_element_located(BaseLocators.yandex_assert_locator)
         )
-        text = result.get_attribute("placeholder")
-        return text
+        return result
 
     def input_order_date_step_one(self):
-        # дожидаемся загрузки страницы с формой создания заказа
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                self.order_page_locator.order_page_title
-            )
+        self.wait.until(
+            ec.visibility_of_element_located(OrderPageLocators.order_page_title)
         )
         self.input_first_name()
-        time.sleep(0.3)
         self.input_last_name()
-        time.sleep(0.3)
         self.input_adress()
-        time.sleep(0.3)
         self.input_subway_station()
-        time.sleep(0.3)
         self.input_phone_number()
-        time.sleep(0.3)
 
     def input_order_date_step_two(self):
-        # дожидаемся загрузки второй страницы с формой создания заказа
-        WebDriverWait(self.driver, 5).until(
-            expected_conditions.visibility_of_element_located(
-                self.order_page_locator.order_page_second_title
-            )
+        self.wait.until(
+            ec.visibility_of_element_located(OrderPageLocators.order_page_second_title)
         )
         self.input_date()
-        time.sleep(0.3)
         self.input_order_time()
-        time.sleep(0.3)
         self.select_color()
-        time.sleep(0.3)
-        self.input_comment()
-        time.sleep(0.3)

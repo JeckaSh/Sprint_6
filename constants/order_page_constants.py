@@ -7,5 +7,4 @@ class OrderPageConstants:
     phone_number = "+79111111111"
 
     # вторая страница
-    date = "24-06-2026"
     comment = "Hello world!"

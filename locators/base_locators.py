@@ -11,7 +11,7 @@ class BaseLocators:
         By.XPATH,
         ".//div[@class='Home_FinishButton__1_cWm']/button[@class='Button_Button__ra12g Button_Middle__1CSJM']",
     ]
-    accept_coockie_button = [By.ID, "rcc-confirm-button"]
+    accept_cookie_button = [By.ID, "rcc-confirm-button"]
 
     base_scooter_logo = [
         By.XPATH,
@@ -23,3 +23,7 @@ class BaseLocators:
     ]  # проверка переход на яндекс
 
     yandex_page_search_field = [By.XPATH, ".//textarea[@placeholder='Найдётся всё']"]
+    yandex_assert_locator = [
+        By.XPATH,
+        ".//a[@class='Link Link_view_default LogoLink']",
+    ]
