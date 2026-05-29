@@ -1,25 +1,9 @@
-from selenium import webdriver
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as ec
-from selenium.common.exceptions import TimeoutException
 from locators.faq_section_locators import FaqSectionLocators
-from locators.base_locators import BaseLocators
 from pages.base_page import BasePage
-from constants.urls import Urls
 
 
 class FaqPage(BasePage):
-    @allure.step("Открывает главную страницу Scooter")
-    def open_homepage(self):
-        """Открывает главную страницу Scooter"""
-        self.go_homepage()
-
-    @allure.step("Принимает Cookie")
-    def accept_cookie(self):
-        '''Нажимает кнопку "принять cookie"'''
-        self.cookie()
 
     @allure.step("Скроллит страницу до раздела FAQ")
     def scroll_page_to_faq(self):

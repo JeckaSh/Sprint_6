@@ -5,7 +5,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
 import allure
-from selenium import webdriver
 from locators.faq_section_locators import FaqSectionLocators
 from pages.faq_page import FaqPage
 
@@ -31,8 +30,8 @@ class TestFaqPage:
     def test_faq_page(self, driver, locator, expected_text):
         faq_page = FaqPage(driver)
 
-        faq_page.open_homepage()
-        faq_page.accept_cookie()
+        faq_page.go_homepage()
+        faq_page.cookie()
 
         faq_page.scroll_page_to_faq()
         faq_page.click_faq_button(locator)

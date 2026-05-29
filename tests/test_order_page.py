@@ -5,8 +5,6 @@ sys.path.append(os.path.join(os.path.dirname(__file__), ".."))
 
 import pytest
 import allure
-from selenium import webdriver
-from locators.order_page_locators import OrderPageLocators
 from pages.order_page import OrderPage
 from locators.base_locators import BaseLocators
 
@@ -27,8 +25,8 @@ class TestOrderPage:
     def test_make_order_positive(self, driver, entry_point):
         order_page = OrderPage(driver)
 
-        order_page.open_homepage()
-        order_page.accept_cookie()
+        order_page.go_homepage()
+        order_page.cookie()
 
         order_page.click_entry_point_order_page(entry_point)
 

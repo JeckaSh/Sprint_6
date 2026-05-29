@@ -1,25 +1,13 @@
-from selenium import webdriver
+# from selenium import webdriver
 import allure
-from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as ec
-from selenium.common.exceptions import TimeoutException
 from locators.order_page_locators import OrderPageLocators
 from locators.base_locators import BaseLocators
 from pages.base_page import BasePage
-from constants.urls import Urls
 from constants.order_page_constants import OrderPageConstants
 
 
 class OrderPage(BasePage):
-
-    @allure.step("Открывает главную страницу Scooter")
-    def open_homepage(self):
-        self.go_homepage()
-
-    @allure.step("Принимает Cookie")
-    def accept_cookie(self):
-        self.cookie()
 
     @allure.step("Нажимает 'заказать' самокат на главной странице")
     def click_entry_point_order_page(self, locator):
@@ -130,9 +118,16 @@ class OrderPage(BasePage):
         self.click_element(BaseLocators.base_yandex_logo)
         windows = self.get_all_windows()
         self.switch_window(windows)
-        result = self.wait.until(
-            ec.visibility_of_element_located(BaseLocators.yandex_assert_locator)
-        )
+        # если открывается окно с капчей - ищем yandex_assert_locator
+        try:
+            result = self.wait.until(
+                (ec.visibility_of_element_located(BaseLocators.yandex_assert_locator))
+            )
+        # если открывается главная страница - ищем yandex_page_search_field
+        except:
+            result = self.wait.until(
+                ec.visibility_of_element_located(BaseLocators.yandex_page_search_field)
+            )
         return result
 
     def input_order_date_step_one(self):

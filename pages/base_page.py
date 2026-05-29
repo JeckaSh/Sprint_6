@@ -1,11 +1,11 @@
-import pytest
-from selenium import webdriver
+import allure
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.common.exceptions import TimeoutException
 from selenium.webdriver.support import expected_conditions as ec
 from constants.urls import Urls
 from locators.base_locators import BaseLocators
+from locators.order_page_locators import OrderPageLocators
 import datetime
 
 
@@ -45,10 +45,8 @@ class BasePage:
 
     def get_current_day(self):
         today = datetime.date.today().strftime("%d")
-        locator = [
-            By.XPATH,
-            f".//div[@class='react-datepicker__month']//div[contains(@class, '{today}')]",
-        ]
+        locator = OrderPageLocators.date_locator.copy()
+        locator[1] = locator[1].format(today)
         return locator
 
     def get_all_windows(self):
@@ -59,9 +57,11 @@ class BasePage:
         new_window = window[-1]
         self.driver.switch_to.window(new_window)
 
+    @allure.step("Открывает главную страницу Scooter")
     def go_homepage(self):
         self.go_to_url(Urls.scooter_homepage)
 
+    @allure.step("Нажимает кнопку 'принять cookie'")
     def cookie(self):
         try:
             self.wait.until(

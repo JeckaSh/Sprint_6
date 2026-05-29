@@ -78,3 +78,8 @@ class OrderPageLocators:
         By.XPATH,
         ".//button[contains(text(), 'Посмотреть статус')]",
     ]
+
+    date_locator = [
+            By.XPATH,
+            ".//div[@class='react-datepicker__month']//div[contains(@class, '{}')]",
+        ]
